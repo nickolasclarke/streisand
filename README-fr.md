@@ -130,6 +130,9 @@ Effectuez toutes ces tâches sur votre machine locale.
 
             sudo pip install ansible markupsafe
 * Installez les bibliothèques Python nécessaires pour votre fournisseur de cloud.
+  * Aliyun
+
+            sudo pip install ansible_alicloud
   * Amazon EC2
 
             sudo pip install boto

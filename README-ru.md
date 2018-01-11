@@ -129,6 +129,9 @@
 
         sudo pip install ansible markupsafe
 * Установите необходимые библиотеки Python для вашего облачного хостера. Если вы настраиваете локальный или существующий сервер, вы можете пропустить этот шаг.
+  * Aliyun
+
+        sudo pip install ansible_alicloud
   * Amazon EC2
 
         sudo pip install boto

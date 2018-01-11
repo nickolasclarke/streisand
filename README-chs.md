@@ -129,6 +129,9 @@ Streisand 运行在**你自己的计算机上时（或者你电脑的虚拟机�
 
         sudo pip install ansible markupsafe
 * 以下使用 pip 安装的 Python 库根据你所使用的 VPS 供应商不同而不同。如果你准备将目前使用的 VPS 变成网关，可以跳过此步。
+  * 阿里云 ECS
+
+        sudo pip install ansible_alicloud
   * 亚马逊 EC2
 
         sudo pip install boto

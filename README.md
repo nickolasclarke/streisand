@@ -132,6 +132,9 @@ Complete all of these tasks on your local home machine.
 * Install the necessary Python libraries for your chosen cloud provider. If you
     are using the advanced local provisioning mode or the existing server mode
     you can skip this section.
+  * Aliyun
+
+        sudo pip install ansible_alicloud
   * Amazon EC2
 
         sudo pip install boto

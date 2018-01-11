@@ -1,0 +1,93 @@
+---
+- name: Provision the Aliyun Server
+# =======================================
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+
+  vars:
+    regions:
+      "1":  "cn-qingdao"
+      "2":  "cn-beijing"
+      "3":  "cn-zhangjiakou"
+      "4":  "cn-huhehaote"
+      "5":  "cn-hangzhou"
+      "6":  "cn-shanghai"
+      "7":  "cn-shenzhen"
+      "8":  "cn-hongkong"
+      "9":  "ap-southeast-1"
+      "10": "ap-southeast-2"
+      "11": "ap-southeast-3"
+      "12": "ap-northeast-1"
+      "13": "us-west-1"
+      "14": "us-east-1"
+      "15": "eu-central-1"
+      "16": "me-east-1"
+
+  # These variable files are included so the aliyun-security-group role
+  # knows which ports to open
+  vars_files:
+    - roles/l2tp-ipsec/defaults/main.yml
+    - roles/openconnect/defaults/main.yml
+    - roles/openvpn/defaults/main.yml
+    - roles/shadowsocks/defaults/main.yml
+    - roles/ssh/defaults/main.yml
+    - roles/lets-encrypt/vars/main.yml
+    - roles/streisand-gateway/defaults/main.yml
+    - roles/stunnel/defaults/main.yml
+    - roles/tor-bridge/defaults/main.yml
+    - roles/wireguard/defaults/main.yml
+
+  vars_prompt:
+    - name: "aliyun_region"
+      prompt: >
+        What region should the server be located in?
+          1.  China North 1     (Qingdao)
+          2.  China North 2     (Beijing)
+          3.  China North 3     (Zhangjiaokou)
+          4.  China North 5     (Huhehaote)
+          5.  China East 1      (Hangzhou)
+          6.  China East 2      (Shanghai)
+          7.  China South 1     (Shenzhen)
+          8.  Hong Kong         (Hong Kong)
+          9.  Asia Pacific SE 1 (Singapore)
+          10. Asia Pacific SE 2 (Sydney)
+          11. Asia Pacific SE 3 (Kuala Lumpur)
+          12. Asia Pacific NE 1 (Tokyo)
+          13. US West 1         (Silicon Valley)
+          14. US East 1         (Virginia)
+          15. Germany 1         (Frankfurt)
+          16. Middle East 1     (Dubai)
+
+        Please choose the number of your region. Press enter for default (#8) region.
+      default: "8"
+      private: no
+
+    - name: "aliyun_server_name"
+      prompt: "\nWhat should the server be named? Press enter for default (streisand).\n"
+      default: "streisand"
+      private: no
+
+    - name: "aliyun_access_key"
+      prompt: "\n\nNew API access tokens can be generated in the DigitalOcean control panel.\nhttps://cloud.digitalocean.com/settings/applications\n  * When generating a new token, please note that the Write Scope is necessary\n    in order to create Droplets.\n\nIf this field is left blank, the environment variable DO_API_KEY\nwill be used.\n\nWhat is your DigitalOcean Access Token?\n"
+      private: no
+
+    - name: "aliyun_secret_key"
+      prompt: "\n\nNew API access tokens can be generated in the DigitalOcean control panel.\nhttps://cloud.digitalocean.com/settings/applications\n  * When generating a new token, please note that the Write Scope is necessary\n    in order to create Droplets.\n\nIf this field is left blank, the environment variable DO_API_KEY\nwill be used.\n\nWhat is your DigitalOcean Access Token?\n"
+      private: no
+
+    - name: "aliyun_ssh_name"
+      prompt: "\n\nThe following information can be found on your DigitalOcean control panel.\nhttps://cloud.digitalocean.com/settings/security\n\nWhat is the name of the DigitalOcean SSH key that you would like to use?\n  * If you have never uploaded an SSH key to DigitalOcean then the default\n    value will work!\n  * This key should match your Streisand SSH key file (default: ~/.ssh/id_rsa.pub).\n\  * DigitalOcean requires SSH keys to be unique. You cannot upload multiple\n    keys that have the same value under different names.\n\n    If you see an error that says 'SSH Key failed to be created' once the setup\n    process starts, then this is the problem. You can retry the setup process\n    using the name of the existing SSH key from the DigitalOcean control panel\n    that matches the contents of your RSA public key.\n"
+      default: "streisand"
+      private: no
+
+    - name: "confirmation"
+      prompt: "\nStreisand will now set up your server. This process usually takes around ten minutes. Press Enter to begin setup...\n"
+
+  roles:
+    - genesis-aliyun
+
+- import_playbook: ssh-setup.yml
+- import_playbook: cloud-status.yml
+- import_playbook: streisand.yml
+...
