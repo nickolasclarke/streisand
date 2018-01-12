@@ -168,24 +168,26 @@ check_ansible
 
 # Figure out which genesis role to invoke
 read -r -p "Which provider are you using?
-  1. Amazon
-  2. Azure
-  3. DigitalOcean
-  4. Google
-  5. Linode
-  6. Rackspace
-  7. Localhost (Advanced)
-  8. Existing Server (Advanced)
+  1. Aliyun
+  2. Amazon
+  3. Azure
+  4. DigitalOcean
+  5. Google
+  6. Linode
+  7. Rackspace
+  8. Localhost (Advanced)
+  9. Existing Server (Advanced)
 : " reply
 
 case "$reply" in
-  1) run_genesis amazon.yml;;
-  2) run_genesis azure.yml;;
-  3) run_genesis digitalocean.yml;;
-  4) run_genesis google.yml;;
-  5) run_genesis linode.yml;;
-  6) run_genesis rackspace.yml;;
-  7) local_provision;;
-  8) existing_server;;
+  1) run_genesis aliyun.yml;;
+  2) run_genesis amazon.yml;;
+  3) run_genesis azure.yml;;
+  4) run_genesis digitalocean.yml;;
+  5) run_genesis google.yml;;
+  6) run_genesis linode.yml;;
+  7) run_genesis rackspace.yml;;
+  8) local_provision;;
+  9) existing_server;;
   *) echo; echo "Invalid provider selected."; exit 1;;
 esac

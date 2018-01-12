@@ -1,10 +1,5 @@
 ---
 #use "small" for all regions but Dubai, where only Gen II hardware is available.
-aliyun_ubuntu_x64_image_id: "ubuntu_16_0402_64_40G_alibase_*.vhd"
+aliyun_ubuntu_x64_image_id: "ubuntu_16_0402_64_20G_alibase_*.vhd"
 aliyun_tiny_instance_size_id: "ecs.n1.tiny"
 aliyun_small_instance_size_id: "ecs.xn4.small"
-
-aliyun_allocate_public_ip: True
-aliyun_system_disk_category: cloud_efficiency
-aliyun_auto_renew: True
-aliyun_auto_renew_period: 1

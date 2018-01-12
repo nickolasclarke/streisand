@@ -8,48 +8,40 @@
   changed_when: False
 
 - name: Create the Aliyun ECS instance
-  ec2:
+  alicloud_instanc:
     alicloud_access_key: "{{ aliyun_access_key }}"
     alicloud_secret_key: "{{ aliyun_secret_key }}"
+    region: "{{ aliyun_region }}"
     instance_type: "{{ aliyun_small_instance_size_id }}"
     image: "{{ aliyun_ubuntu_x64_image_id }}"
-    region: "{{ aliyun_region }}"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id | default(omit) }}"
-    assign_public_ip: "{{ aws_vpc_subnet_id is defined and aws_vpc_subnet_id != '' }}"
+    system_disk_category: cloud_efficiency
+    system_disk_size: 20
+    allocate_public_ip: True
     key_name: "{{ aliyun_ssh_name }}"
-    group: "{{ aliyun-security-group }}"
-    instance_tags:
-      Name: "{{ aliyun_ubuntu_x64_image_id }}"
-    wait: yes
+    group_id: "{{ aliyun-security-group }}"
+    auto_renew: True
+    auto_renew_period: 1
+    state: running
   register: streisand_server
 
 - name: Wait until the server has finished booting and OpenSSH is accepting connections
   wait_for:
-    host: "{{ streisand_server.instances[0].public_ip }}"
+    host: "{{ streisand_server.instances[0].ip_address }}"
     port: 22
     search_regex: OpenSSH
     timeout: 600
 
-- name: Allocate and associate Elastic IP
-  ec2_eip:
-    alicloud_access_key: "{{ aliyun_access_key }}"
-    alicloud_secret_key: "{{ aliyun_secret_key }}"
-    region: "{{ aws_region }}"
-    device_id: "{{ streisand_server.instances[0].id }}"
-    in_vpc: "{{ aws_vpc_id is defined and aws_vpc_id != '' }}"
-  register: instance_eip
-
 - name: Create the in-memory inventory group
   add_host:
-    name: "{{ instance_eip.public_ip }}"
+    name: "{{ streisand_server.instances[0].ip_address }}"
     groups: streisand-host
     ansible_user: ubuntu
     ansible_become: yes
 
 - name: Set the streisand_ipv4_address variable
   set_fact:
-    streisand_ipv4_address: "{{ instance_eip.public_ip }}"
+    streisand_ipv4_address: "{{ streisand_server.instances[0].ip_address }}"
 
 - name: Set the streisand_server_name variable
   set_fact:
-    streisand_server_name: "{{ aws_instance_name | regex_replace('\\s', '_') }}"
+    streisand_server_name: "{{ aliyun_server_name | regex_replace('\\s', '_') }}"
