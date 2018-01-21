@@ -2,45 +2,43 @@
 - set_fact:
     streisand_genesis_role: "genesis-aliyun"
 
-- name: "Get the {{ streisand_ssh_private_key }}.pub contents"
-  command: "cat {{ streisand_ssh_private_key }}.pub"
-  register: ssh_key
-  changed_when: False
-
-- name: Create the Aliyun ECS instance
-  alicloud_instanc:
+- name: Creating the Aliyun ECS instance
+  alicloud_instance:
     alicloud_access_key: "{{ aliyun_access_key }}"
     alicloud_secret_key: "{{ aliyun_secret_key }}"
-    region: "{{ aliyun_region }}"
-    instance_type: "{{ aliyun_small_instance_size_id }}"
-    image: "{{ aliyun_ubuntu_x64_image_id }}"
+    alicloud_region: '{{ aliyun_region }}'
+    type: '{{ aliyun_small_instance_size_id }}'
+    image: '{{ aliyun_ubuntu_x64_image_id }}'
     system_disk_category: cloud_efficiency
-    system_disk_size: 20
-    allocate_public_ip: True
-    key_name: "{{ aliyun_ssh_name }}"
-    group_id: "{{ aliyun-security-group }}"
-    auto_renew: True
-    auto_renew_period: 1
-    state: running
+    system_disk_size: 40
+    instance_name: streisand-test
+    key_name: "{{ aliyun_ssh_key }}"
+    allocate_public_ip: true
+    internet_charge_type: PayByTraffic
+    max_bandwidth_out: 100
+    group_id: '{{ aliyun_security_group }}'
+    sg_action: join
+    count: 1
+    state: present
   register: streisand_server
 
 - name: Wait until the server has finished booting and OpenSSH is accepting connections
   wait_for:
-    host: "{{ streisand_server.instances[0].ip_address }}"
+    host: "{{ streisand_server.instance_ips[0] }}"
     port: 22
     search_regex: OpenSSH
     timeout: 600
 
 - name: Create the in-memory inventory group
   add_host:
-    name: "{{ streisand_server.instances[0].ip_address }}"
+    name: "{{ streisand_server.instance_ips[0] }}"
     groups: streisand-host
     ansible_user: ubuntu
     ansible_become: yes
 
 - name: Set the streisand_ipv4_address variable
   set_fact:
-    streisand_ipv4_address: "{{ streisand_server.instances[0].ip_address }}"
+    streisand_ipv4_address: "{{ streisand_server.instance_ips[0] }}"
 
 - name: Set the streisand_server_name variable
   set_fact:

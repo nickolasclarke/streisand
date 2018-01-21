@@ -1,2 +1,2 @@
 ---
-aliyun_security_group: "streisand-{{ aliyun_instance_name }}"
+aliyun_security_group: "streisand"

@@ -7,6 +7,9 @@
 # Core with Azure dependencies
 ansible[azure]
 
+#Aliyun ECS
+ansible-alicloud
+
 # AWS
 boto
 boto3
