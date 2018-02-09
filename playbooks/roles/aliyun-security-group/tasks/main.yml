@@ -29,8 +29,6 @@
         dest_cidr_ip: "0.0.0.0/0"
   register: aliyun_security_group_details
 
-- debug: var=test_security_group_details
-
 # L2TP/IPsec
 # ---
 - name: Open the L2TP/IPsec ports in the Aliyun ECS security group
