@@ -1,5 +1,6 @@
 ---
-#use "small" for all regions but Dubai, where only Gen II hardware is available.
+#how to dynamically find the latest image?
 aliyun_ubuntu_x64_image_id: "ubuntu_16_0402_64_20G_alibase_20171227.vhd"
+#use "small" for all regions but Dubai, where only Gen II hardware is available.
 aliyun_tiny_instance_size_id: "ecs.n1.tiny"
 aliyun_small_instance_size_id: "ecs.xn4.small"
