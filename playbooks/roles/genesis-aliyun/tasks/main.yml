@@ -33,7 +33,6 @@
   add_host:
     name: "{{ streisand_server.instance_ips[0] }}"
     groups: streisand-host
-    ansible_user: ubuntu
     ansible_become: yes
 
 - name: Set the streisand_ipv4_address variable
